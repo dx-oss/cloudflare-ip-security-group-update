@@ -1,0 +1,42 @@
+service: cloudflare-ip-security-group
+
+provider:
+  name: aws
+  runtime: python2.7
+  memorySize: 512
+  stage: prod
+  region: eu-north-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:ec2:*:*:security-group/'
+            - Ref: securityGroup
+      Action:
+        - "ec2:AuthorizeSecurityGroupIngress"
+        - "ec2:RevokeSecurityGroupIngress"
+    - Effect: "Allow"
+      Resource: "*"
+      Action:
+        - "ec2:DescribeSecurityGroups"
+
+functions:
+  update:
+    handler: cf-security-group-update.lambda_handler
+    events:
+      - schedule: rate(10 minutes)
+    timeout: 30
+    environment:
+      PORTS_LIST: ${opt:ports}
+      SECURITY_GROUP_IDS_LIST:
+        Ref: securityGroup
+
+resources:
+  Resources:
+    securityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupName: "CloudFlareAccess"
+        GroupDescription: "CloudFlare ips whitelisted"
+        VpcId: ${opt:vpcid}

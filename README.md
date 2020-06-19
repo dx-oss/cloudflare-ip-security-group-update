@@ -10,6 +10,15 @@ updated by Ryan Gibbons (rtgibbons) and Endrigo Antonini (antonini).
 Instructions
 ------------
 
+#### Serverless
+Serverless will automatically create and manage a security group in the specified vpc.
+And add cloudflare ips to its inbound rules on ports specified.
+(S3 permissions is not set up in serverless.yml because i dont need it, but you can uncomment the permissions in serverless.yml)
+```
+serverless deploy  --vpcid "vpc-12345678912345678" --ports "80,443"
+```
+
+#### Manual
 Use the content of the file `cf-security-group-update.py` in your lambda ou upload it.
 
 It is also required that you upload or create the `package` file as is available on this repository.

@@ -107,17 +107,16 @@ def update_s3_policies_policies(ip_addresses):
 
     cloudflare_ips = ipv4 + ipv6
 
-    if not "S3_CLOUDFLARE_SID" in os.environ:
+    sid = os.getenv("S3_CLOUDFLARE_SID")
+    if not sid:
         print("Not configured 'S3_CLOUDFLARE_SID' variable, so will not check S3")
         return
 
-    if not "S3_BUCKET_IDS_LIST" in os.environ and not "S3_BUCKET_ID" in os.environ:
-        raise Exception("Missing S3 basic configuration 'S3_BUCKET_IDS_LIST' or 'S3_BUCKET_ID'.") 
+    s3_bucket_ids_list = os.getenv("S3_BUCKET_IDS_LIST")
+    if not s3_bucket_ids_list:
+        raise Exception("Missing S3 basic configuration 'S3_BUCKET_IDS_LIST'.") 
 
-    sid = os.environ['S3_CLOUDFLARE_SID']
-    s3_policy_tuple = map(get_aws_s3_bucket_policy, os.environ['S3_BUCKET_IDS_LIST'].split(","))
-    if not s3_policy_tuple:
-        s3_policy_tuple = [get_aws_s3_bucket_policy(os.environ['S3_BUCKET_ID'])]
+    s3_policy_tuple = map(get_aws_s3_bucket_policy, s3_bucket_ids_list.split(","))
 
     for s3_tuple in s3_policy_tuple:
         updated = False
@@ -147,17 +146,14 @@ def update_security_group_policies(ip_addresses):
     """ Update Information of Security Groups """
     print("Checking policies of Security Groups")
 
-    if not "SECURITY_GROUP_IDS_LIST" in os.environ and not "SECURITY_GROUP_ID" in os.environ:
-        print("Missing S3 basic configuration 'SECURITY_GROUP_IDS_LIST' or 'SECURITY_GROUP_ID'. Will not check Security Policy.") 
+    security_group_list = os.getenv("SECURITY_GROUP_IDS_LIST")
+    if not security_group_list:
+        print("Missing S3 basic configuration 'SECURITY_GROUP_IDS_LIST'. Will not check Security Policy.") 
         return
    
-    ports = map(int, os.environ['PORTS_LIST'].split(","))
-    if not ports:
-        ports = [80]
+    ports = map(int, (os.getenv("PORTS_LIST") or "80").split(","))
 
-    security_groups = map(get_aws_security_group, os.environ['SECURITY_GROUP_IDS_LIST'].split(","))
-    if not security_groups:
-        security_groups = [get_aws_security_group(os.environ['SECURITY_GROUP_ID'])]
+    security_groups = map(get_aws_security_group, security_group_list.split(","))
     
     ## Security Groups
     for security_group in security_groups: 

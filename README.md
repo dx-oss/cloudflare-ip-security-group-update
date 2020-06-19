@@ -62,3 +62,4 @@ Contributors
 * Ryan Gibbons ([@rtgibbons](https://www.github.com/rtgibbons)) 
 * Ben Steinberg ([@bensteinberg](https://www.github.com/bensteinberg))
 * Endrigo Antonini ([@antonini](https://www.github.com/antonini))
+* Hans Øyvind Laderud ([@afreakk](https://www.github.com/afreakk))

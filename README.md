@@ -1,4 +1,4 @@
-cloudflare-ip-security-group-update
+Cloudflare's IP address list > AWS Security Group and S3 Policies
 ===================================
 
 This Lambda function to retrieve Cloudflare's IP address list and
@@ -6,6 +6,8 @@ update an AWS Security Group and S3 Policies.
 
 It was originally written by John McCracken (johnmccuk@gmail.com), 
 updated by Ryan Gibbons (rtgibbons) and Endrigo Antonini (antonini).
+
+We have made a fork that we are expanding and optimizing for our use cases and hopefully for more generic use cases. It could at some point be a version two written in go. Hans Øyvind Laderud (afreakk) and Christian Sakshaug (csakshaug) supporting this fork on behalf of dx.
 
 Instructions
 ------------
